@@ -1,13 +1,12 @@
 const boom = require("@hapi/boom");
 const { models } = require("./../libs/sequelize.js");
 
-const getConnection = require("../libs/postgres");
-
 class UserService {
   constructor() {}
 
   async create(data) {
-    return data;
+    const newUser = await models.User.create(data);
+    return newUser;
   }
 
   async find() {
@@ -16,19 +15,24 @@ class UserService {
   }
 
   async findOne(id) {
-    return { id };
+    const user = await models.User.findByPk(id);
+    if (!user) {
+      throw boom.notFound('user not found');
+    }
+    return user;
   }
 
   async update(id, changes) {
-    return {
-      id,
-      changes,
-    };
+    const user = await this.findOne(id);
+    const rta = await user.update(changes);
+    return rta;
   }
 
   async delete(id) {
+    const user = await this.findOne();
+    await user.destroy();
     return { id };
   }
-}
+} 
 
 module.exports = UserService;

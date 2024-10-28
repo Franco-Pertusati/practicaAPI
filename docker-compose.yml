@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=my_store
+      - POSTGRES_USER=Franco
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/lib/postgres/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+    ports:
+      - "5050:80"
